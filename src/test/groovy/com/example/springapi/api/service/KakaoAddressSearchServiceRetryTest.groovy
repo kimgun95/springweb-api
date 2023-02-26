@@ -45,17 +45,18 @@ class KakaoAddressSearchServiceRetryTest extends AbstractIntegrationContainerBas
                 .build()
         def expectedResponse = new KakaoApiResponseDto(metaDto, Arrays.asList(documentDto))
         def uri = mockWebServer.url("/").uri()
+
+        when:
         mockWebServer.enqueue(new MockResponse().setResponseCode(504))
         mockWebServer.enqueue(new MockResponse().setResponseCode(200)
                 .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .setBody(mapper.writeValueAsString(expectedResponse)))
 
-        when:
-        2 * kakaoUriBuilderService.buildUriByAddressSearch(inputAddress) >> uri
-
         def kakaoApiResult = kakaoAddressSearchService.requestAddressSearch(inputAddress)
 
         then:
+        2 * kakaoUriBuilderService.buildUriByAddressSearch(inputAddress) >> uri
+
         kakaoApiResult.getDocumentList().size() == 1
         kakaoApiResult.getMetaDto().totalCount == 1
         kakaoApiResult.getDocumentList().get(0).getAddressName() == inputAddress
@@ -71,11 +72,11 @@ class KakaoAddressSearchServiceRetryTest extends AbstractIntegrationContainerBas
         mockWebServer.enqueue(new MockResponse().setResponseCode(504))
         mockWebServer.enqueue(new MockResponse().setResponseCode(504))
 
-        2 * kakaoUriBuilderService.buildUriByAddressSearch(inputAddress) >> uri
-
         def result = kakaoAddressSearchService.requestAddressSearch(inputAddress)
 
         then:
+        2 * kakaoUriBuilderService.buildUriByAddressSearch(inputAddress) >> uri
+
         result == null
     }
 
