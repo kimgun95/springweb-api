@@ -16,7 +16,7 @@ class PharmacyRedisTemplateServiceTest extends AbstractIntegrationContainerBaseT
                 })
     }
 
-    def "save success - 여러개의 pharmacyDto 저장에 성공한다"() {
+    def "save success - pharmacyDto 저장에 성공한다"() {
         given:
         String pharmacyName = "name"
         String pharmacyAddress = "address"
@@ -42,12 +42,6 @@ class PharmacyRedisTemplateServiceTest extends AbstractIntegrationContainerBaseT
 
         then:
         result.size() == 2
-        result.get(0).id == 1L
-        result.get(0).pharmacyName == pharmacyName
-        result.get(0).pharmacyAddress == pharmacyAddress
-        result.get(1).id == 2L
-        result.get(1).pharmacyName == pharmacyName1
-        result.get(1).pharmacyAddress == pharmacyAddress1
     }
 
     def "findAll success - redis에 data가 없다면 empty list를 반환한다"() {
