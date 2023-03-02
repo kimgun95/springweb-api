@@ -53,17 +53,15 @@ spring:
     url: jdbc:mariadb://pharmacy-recommendation-database:3307/pharmacy-recommendation
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
-    redis:
-      host: pharmacy-recommendation-redis
-      port: 6379
+  redis:
+    host: pharmacy-recommendation-redis
+    port: 6379
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: validate # prod 배포시 validate
+      ddl-auto: validate
     show-sql: true
 
-  pharmacy:
-    recommendation:
-      base:
-        url: http://localhost/dir/ # aws ec2 ip 할당 받은 후 변경 예정
+pharmacy:
+  recommendation:
+    base:
+      url: http://localhost/dir/
