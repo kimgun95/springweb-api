@@ -1,7 +1,7 @@
-version: "3.8"
-services:
-  pharmacy-recommendation-redis:
-    container_name: pharmacy-recommendation-redis
+version: "3.8"                                          # 파일 규격 버전
+services:                                               # 이 항목 밑에 실행하려는 컨테이너들을 정의
+  pharmacy-recommendation-redis:                        # 서비스명
+    container_name: pharmacy-recommendation-redis       # 컨테이너 명
     build:
       dockerfile: Dockerfile
       context: ./redis
@@ -21,11 +21,11 @@ services:
       - ./database/config:/etc/mysql/conf.d
       - ./database/init:/docker-entrypoint-initdb.d
     ports:
-      - "3307:3306"
+      - "3307:3307"      # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
   pharmacy-recommendation-app:
     container_name: pharmacy-recommendation-app
     build: .
-    depends_on:
+    depends_on:          # DB, REDIS 컨테이너가 실행된 다음 WEB을 실행시킨다.
       - pharmacy-recommendation-database
       - pharmacy-recommendation-redis
     image: kimgun95/pharmacy-recommendation-app
@@ -36,4 +36,6 @@ services:
       - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
     ports:
       - "80:8080"
-    restart: always
+    restart: always # depends on은 실행 순서만 컨트롤 할뿐,
+    # 컨테이너 안의 서비스가 실행가능한 상태인지까지는 확인 하지 않기 때문에
+    # DB 또는 Redis가 아직 실행가능한 상태가 아니여서 실패하는 경우 재시작 하도록 설정
